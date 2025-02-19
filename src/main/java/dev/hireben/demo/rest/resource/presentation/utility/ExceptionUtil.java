@@ -17,9 +17,8 @@ public class ExceptionUtil {
   // Methods
   // ---------------------------------------------------------------------------//
 
-  public String formatDebugString(String clazz, String code, SeverityLevel severity,
-      String message) {
-    return String.format(DEBUG_STRING_FORMAT, clazz, code, severity.name(), message);
+  public String formatDebugString(String className, String code, SeverityLevel severity, String message) {
+    return String.format(DEBUG_STRING_FORMAT, className, code, severity.name(), message);
   }
 
   // ---------------------------------------------------------------------------//

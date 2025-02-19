@@ -32,12 +32,12 @@ public class HttpHeaderFilter extends OncePerRequestFilter {
       @NonNull FilterChain filterChain)
       throws ServletException, IOException {
 
+    request.setAttribute(RequestAttributeKey.TRACE_ID, extractTraceId(request));
+
     if (!hasValidApiKey(request)) {
       response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Missing or invalid API key");
       return;
     }
-
-    request.setAttribute(RequestAttributeKey.TRACE_ID, extractTraceId(request));
 
     filterChain.doFilter(request, response);
   }

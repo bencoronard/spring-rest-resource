@@ -25,7 +25,7 @@ import dev.hireben.demo.rest.resource.application.usecase.RetrieveResourceUseCas
 import dev.hireben.demo.rest.resource.application.usecase.UpdateResourceUseCase;
 import dev.hireben.demo.rest.resource.domain.dto.Paginable;
 import dev.hireben.demo.rest.resource.domain.dto.Paginated;
-import dev.hireben.demo.rest.resource.presentation.model.DefaultValue;
+import dev.hireben.demo.rest.resource.presentation.model.ResponseValue;
 import dev.hireben.demo.rest.resource.presentation.request.CreateResourceRequest;
 import dev.hireben.demo.rest.resource.presentation.request.UpdateResourceRequest;
 import dev.hireben.demo.rest.resource.presentation.response.GlobalResponseBody;
@@ -74,7 +74,7 @@ public class ResourceControllerV1 {
     Paginated<ResourceDTO> payload = readResourceUseCase.findAllResources(paginable, user);
 
     GlobalResponseBody<Paginated<ResourceDTO>> body = GlobalResponseBody.<Paginated<ResourceDTO>>builder()
-        .code(DefaultValue.RESP_CODE_SUCCESS)
+        .code(ResponseValue.RESP_CODE_SUCCESS)
         .message("Resources")
         .payload(payload)
         .build();
@@ -92,7 +92,7 @@ public class ResourceControllerV1 {
     ResourceDTO payload = readResourceUseCase.findResource(id, user);
 
     GlobalResponseBody<ResourceDTO> body = GlobalResponseBody.<ResourceDTO>builder()
-        .code(DefaultValue.RESP_CODE_SUCCESS)
+        .code(ResponseValue.RESP_CODE_SUCCESS)
         .message(String.format("Resource %s", id))
         .payload(payload)
         .build();
@@ -110,7 +110,7 @@ public class ResourceControllerV1 {
     deleteResourceUseCase.deleteResource(id, user);
 
     GlobalResponseBody<Void> body = GlobalResponseBody.<Void>builder()
-        .code(DefaultValue.RESP_CODE_SUCCESS)
+        .code(ResponseValue.RESP_CODE_SUCCESS)
         .message(String.format("Resource %s deleted", id))
         .payload(null)
         .build();
@@ -134,7 +134,7 @@ public class ResourceControllerV1 {
     ResourceDTO createdResource = createResourceUseCase.createResource(dto, user);
 
     GlobalResponseBody<ResourceDTO> body = GlobalResponseBody.<ResourceDTO>builder()
-        .code(DefaultValue.RESP_CODE_SUCCESS)
+        .code(ResponseValue.RESP_CODE_SUCCESS)
         .message("Resource created")
         .payload(createdResource)
         .build();
@@ -159,7 +159,7 @@ public class ResourceControllerV1 {
     ResourceDTO updatedResource = updateResourceUseCase.updateResource(id, dto, user);
 
     GlobalResponseBody<ResourceDTO> body = GlobalResponseBody.<ResourceDTO>builder()
-        .code(DefaultValue.RESP_CODE_SUCCESS)
+        .code(ResponseValue.RESP_CODE_SUCCESS)
         .message(String.format("Resource %s updated", id))
         .payload(updatedResource)
         .build();

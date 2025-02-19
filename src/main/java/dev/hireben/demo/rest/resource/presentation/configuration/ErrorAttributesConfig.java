@@ -12,7 +12,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import dev.hireben.demo.rest.resource.infrastructure.utility.EnvironmentUtil;
 import dev.hireben.demo.rest.resource.presentation.exception.model.SeverityLevel;
-import dev.hireben.demo.rest.resource.presentation.model.DefaultValue;
 import dev.hireben.demo.rest.resource.presentation.model.RequestAttributeKey;
 import dev.hireben.demo.rest.resource.presentation.response.GlobalResponseBody;
 import dev.hireben.demo.rest.resource.presentation.utility.ExceptionUtil;
@@ -40,25 +39,23 @@ public class ErrorAttributesConfig extends DefaultErrorAttributes {
   public Map<String, Object> getErrorAttributes(WebRequest webRequest, ErrorAttributeOptions options) {
 
     Throwable error = super.getError(webRequest);
-    String errorMsg = (error != null && super.getMessage(webRequest, error) != null)
-        ? super.getMessage(webRequest, error)
-        : "Unknown error occurred";
-    String errorClass = (error != null) ? error.getClass().getName() : "UnknownException";
+    String errorMsg = super.getMessage(webRequest, error);
+    String errorClassName = error == null ? "ServletException" : error.getClass().getName();
 
-    String traceId = RequestUtil.getAttribute(webRequest, RequestAttributeKey.TRACE_ID, String.class)
-        .orElse(DefaultValue.TRACE_ID_UNKNOWN);
     String respCode = RequestUtil.getAttribute(webRequest, RequestAttributeKey.ERR_RESP_CODE, String.class)
-        .orElse(DefaultValue.RESP_CODE_UNKNOWN);
+        .orElse(error == null ? "1000" : "9999");
     String respMsg = RequestUtil.getAttribute(webRequest, RequestAttributeKey.ERR_RESP_MSG, String.class)
-        .orElse(DefaultValue.RESP_MSG_UNKNOWN);
-    Object exceptionData = RequestUtil.getAttribute(webRequest, RequestAttributeKey.ERR_RESP_DATA, Object.class)
+        .orElse(error == null ? errorMsg : "Unhandled error at server side");
+    Object respData = RequestUtil.getAttribute(webRequest, RequestAttributeKey.ERR_RESP_DATA, Object.class)
         .orElse(null);
-    SeverityLevel severity = RequestUtil
-        .getAttribute(webRequest, RequestAttributeKey.ERR_SEVERITY, SeverityLevel.class)
-        .orElse(SeverityLevel.LOW);
+
+    SeverityLevel severity = RequestUtil.getAttribute(webRequest, RequestAttributeKey.ERR_SEVERITY, SeverityLevel.class)
+        .orElse(error == null ? SeverityLevel.LOW : SeverityLevel.HIGH);
+    String traceId = RequestUtil.getAttribute(webRequest, RequestAttributeKey.TRACE_ID, String.class)
+        .orElse("TRX-NULL");
 
     String logString = ExceptionUtil.formatTraceLog(traceId,
-        ExceptionUtil.formatDebugString(errorClass, respCode, severity, errorMsg));
+        ExceptionUtil.formatDebugString(errorClassName, respCode, severity, errorMsg));
 
     switch (severity) {
       case HIGH:
@@ -75,7 +72,7 @@ public class ErrorAttributesConfig extends DefaultErrorAttributes {
     GlobalResponseBody<Object> errorAttributes = GlobalResponseBody.<Object>builder()
         .code(respCode)
         .message(respMsg)
-        .payload(exceptionData != null ? exceptionData : environment.isDev() ? errorMsg : null)
+        .payload(respData != null ? respData : environment.isDev() ? errorMsg : null)
         .build();
 
     return objectMapper.convertValue(errorAttributes, new TypeReference<Map<String, Object>>() {

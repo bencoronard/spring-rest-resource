@@ -1,6 +1,8 @@
 package dev.hireben.demo.rest.resource.application.exception;
 
-public class ResourceNotFoundException extends RuntimeException {
+import dev.hireben.demo.rest.resource.application.model.ApplicationException;
+
+public class ResourceNotFoundException extends ApplicationException {
 
   // ---------------------------------------------------------------------------//
   // Constructors

@@ -1,6 +1,8 @@
 package dev.hireben.demo.rest.resource.application.exception;
 
-public class InvalidUserInfoException extends RuntimeException {
+import dev.hireben.demo.rest.resource.application.model.ApplicationException;
+
+public class InvalidUserInfoException extends ApplicationException {
 
   // ---------------------------------------------------------------------------//
   // Constructors
