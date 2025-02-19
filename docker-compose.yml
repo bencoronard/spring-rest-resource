@@ -4,10 +4,9 @@ services:
     build:
       context: .
     ports:
-      - 8081:8080
-    deploy:
-      mode: replicated
-      replicas: 1
+      - 8083:8080
+    networks:
+      - hireben-network
     depends_on:
       postgres:
         condition: service_healthy
@@ -28,6 +27,8 @@ services:
     image: postgres:alpine
     ports:
       - 5432:5432
+    networks:
+      - hireben-network
     volumes:
       - hireben_db_data:/var/lib/postgresql/data
     environment:
@@ -41,6 +42,10 @@ services:
       retries: 1
       start_period: 5s
       start_interval: 10s
+      
+networks:
+  hireben-network:
+    external: true
 
 volumes:
   hireben_db_data:
