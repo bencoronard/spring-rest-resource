@@ -41,8 +41,8 @@ spring:
 info:
   api:
     internal:
-      service-id: "${DEMO_SERVICE_RESOURCE_REST_API_ID:REST_RESOURCE}"
-      secret-key: "${DEMO_SERVICE_RESOURCE_REST_API_SECRET_KEY:hireBenDemoSecretKey}"
+      service-id: "${DEMO_SERVICE_REST_RESOURCE_ID:REST_RESOURCE}"
+      secret-key: "${DEMO_SERVICE_REST_RESOURCE_SECRET_KEY:hireBenDemoSecretKey}"
 
 logging:
   level:
