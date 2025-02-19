@@ -6,7 +6,7 @@ server:
 
 spring:
   application:
-    name: "${DEMO_SERVICE_RESOURCE_REST_API_ID:REST_RESOURCE}"
+    name: "${DEMO_SERVICE_REST_RESOURCE_ID:REST_RESOURCE}"
 
   profiles:
     active: "${DEMO_SERVICE_ENVIRONMENT:dev}"
