@@ -6,6 +6,7 @@ import dev.hireben.demo.rest.resource.application.dto.ResourceDTO;
 import dev.hireben.demo.rest.resource.application.dto.UpdateResourceDTO;
 import dev.hireben.demo.rest.resource.application.dto.UserDTO;
 import dev.hireben.demo.rest.resource.application.exception.ResourceNotFoundException;
+import dev.hireben.demo.rest.resource.application.mapper.ResourceMapper;
 import dev.hireben.demo.rest.resource.domain.entity.Resource;
 import dev.hireben.demo.rest.resource.domain.repository.ResourceRepository;
 import lombok.RequiredArgsConstructor;
@@ -34,13 +35,7 @@ public class UpdateResourceUseCase {
 
     Resource updatedResource = repository.save(foundResource);
 
-    return ResourceDTO.builder()
-        .id(updatedResource.getId())
-        .field1(updatedResource.getField1())
-        .field2(updatedResource.getField2())
-        .field3(updatedResource.getField3())
-        .createdBy(updatedResource.getCreatedBy())
-        .build();
+    return ResourceMapper.toDto(updatedResource);
   }
 
 }

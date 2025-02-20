@@ -5,6 +5,7 @@ import java.time.Instant;
 import dev.hireben.demo.rest.resource.application.dto.CreateResourceDTO;
 import dev.hireben.demo.rest.resource.application.dto.ResourceDTO;
 import dev.hireben.demo.rest.resource.application.dto.UserDTO;
+import dev.hireben.demo.rest.resource.application.mapper.ResourceMapper;
 import dev.hireben.demo.rest.resource.domain.entity.Resource;
 import dev.hireben.demo.rest.resource.domain.repository.ResourceRepository;
 import lombok.RequiredArgsConstructor;
@@ -35,13 +36,7 @@ public class CreateResourceUseCase {
 
     Resource savedResource = repository.save(resource);
 
-    return ResourceDTO.builder()
-        .id(savedResource.getId())
-        .field1(savedResource.getField1())
-        .field2(savedResource.getField2())
-        .field3(savedResource.getField3())
-        .createdBy(savedResource.getCreatedBy())
-        .build();
+    return ResourceMapper.toDto(savedResource);
   }
 
 }

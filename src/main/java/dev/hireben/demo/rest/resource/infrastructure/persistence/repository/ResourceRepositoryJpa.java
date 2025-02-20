@@ -16,6 +16,7 @@ import dev.hireben.demo.rest.resource.domain.entity.Resource;
 import dev.hireben.demo.rest.resource.domain.model.Tenant;
 import dev.hireben.demo.rest.resource.domain.repository.ResourceRepository;
 import dev.hireben.demo.rest.resource.infrastructure.persistence.jpa.entity.ResourceEntity;
+import dev.hireben.demo.rest.resource.infrastructure.persistence.jpa.mapper.ResourceEntityMapper;
 import dev.hireben.demo.rest.resource.infrastructure.persistence.jpa.repository.JpaResourceRepository;
 import lombok.RequiredArgsConstructor;
 
@@ -35,14 +36,14 @@ public class ResourceRepositoryJpa implements ResourceRepository {
 
   @Override
   public Resource save(Resource resource) {
-    return repository.save(ResourceEntity.fromDomain(resource)).toDomain();
+    return ResourceEntityMapper.toDomain(repository.save(ResourceEntityMapper.fromDomain(resource)));
   }
 
   // ---------------------------------------------------------------------------//
 
   @Override
   public void delete(Resource resource) {
-    repository.delete(ResourceEntity.fromDomain(resource));
+    repository.delete(ResourceEntityMapper.fromDomain(resource));
   }
 
   // ---------------------------------------------------------------------------//
@@ -58,7 +59,7 @@ public class ResourceRepositoryJpa implements ResourceRepository {
 
     Page<ResourceEntity> page = repository.findAllByTenant(tenant, pageable);
 
-    Collection<Resource> resources = page.getContent().stream().map(ResourceEntity::toDomain).toList();
+    Collection<Resource> resources = page.getContent().stream().map(ResourceEntityMapper::toDomain).toList();
 
     return Paginated.<Resource>builder()
         .content(resources)
@@ -72,7 +73,7 @@ public class ResourceRepositoryJpa implements ResourceRepository {
 
   @Override
   public Optional<Resource> findByIdAndTenant(Long id, Tenant tenant) {
-    return repository.findByIdAndTenant(id, tenant).map(ResourceEntity::toDomain);
+    return repository.findByIdAndTenant(id, tenant).map(ResourceEntityMapper::toDomain);
   }
 
 }

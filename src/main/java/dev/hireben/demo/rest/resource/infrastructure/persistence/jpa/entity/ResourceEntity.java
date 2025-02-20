@@ -2,7 +2,6 @@ package dev.hireben.demo.rest.resource.infrastructure.persistence.jpa.entity;
 
 import java.time.Instant;
 
-import dev.hireben.demo.rest.resource.domain.entity.Resource;
 import dev.hireben.demo.rest.resource.domain.model.Tenant;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -52,33 +51,5 @@ public class ResourceEntity {
 
   @Column(name = "created_at", updatable = false, nullable = false)
   private Instant createdAt;
-
-  // ---------------------------------------------------------------------------//
-  // Methods
-  // ---------------------------------------------------------------------------//
-
-  public static ResourceEntity fromDomain(Resource resource) {
-    return ResourceEntity.builder()
-        .id(resource.getId())
-        .field1(resource.getField1())
-        .field2(resource.getField2())
-        .field3(resource.getField3())
-        .tenant(resource.getTenant())
-        .createdBy(resource.getCreatedBy())
-        .createdAt(resource.getCreatedAt())
-        .build();
-  }
-
-  public Resource toDomain() {
-    return Resource.builder()
-        .id(this.id)
-        .field1(this.field1)
-        .field2(this.field2)
-        .field3(this.field3)
-        .tenant(this.tenant)
-        .createdBy(this.createdBy)
-        .createdAt(this.createdAt)
-        .build();
-  }
 
 }
