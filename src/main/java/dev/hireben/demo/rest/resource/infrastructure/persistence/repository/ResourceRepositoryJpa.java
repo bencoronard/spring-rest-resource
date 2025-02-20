@@ -13,7 +13,6 @@ import org.springframework.stereotype.Repository;
 import dev.hireben.demo.rest.resource.domain.dto.Paginable;
 import dev.hireben.demo.rest.resource.domain.dto.Paginated;
 import dev.hireben.demo.rest.resource.domain.entity.Resource;
-import dev.hireben.demo.rest.resource.domain.model.Tenant;
 import dev.hireben.demo.rest.resource.domain.repository.ResourceRepository;
 import dev.hireben.demo.rest.resource.infrastructure.persistence.jpa.entity.ResourceEntity;
 import dev.hireben.demo.rest.resource.infrastructure.persistence.jpa.mapper.ResourceEntityMapper;
@@ -49,7 +48,7 @@ public class ResourceRepositoryJpa implements ResourceRepository {
   // ---------------------------------------------------------------------------//
 
   @Override
-  public Paginated<Resource> findAllByTenant(Tenant tenant, Paginable paginable) {
+  public Paginated<Resource> findAllByTenant(String tenant, Paginable paginable) {
 
     List<Order> orders = paginable.getSortFieldsDesc().entrySet().stream()
         .map(entry -> entry.getValue() ? Order.desc(entry.getKey()) : Order.asc(entry.getKey()))
@@ -72,7 +71,7 @@ public class ResourceRepositoryJpa implements ResourceRepository {
   // ---------------------------------------------------------------------------//
 
   @Override
-  public Optional<Resource> findByIdAndTenant(Long id, Tenant tenant) {
+  public Optional<Resource> findByIdAndTenant(Long id, String tenant) {
     return repository.findByIdAndTenant(id, tenant).map(ResourceEntityMapper::toDomain);
   }
 

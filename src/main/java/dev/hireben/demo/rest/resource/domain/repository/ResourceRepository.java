@@ -5,7 +5,6 @@ import java.util.Optional;
 import dev.hireben.demo.rest.resource.domain.dto.Paginable;
 import dev.hireben.demo.rest.resource.domain.dto.Paginated;
 import dev.hireben.demo.rest.resource.domain.entity.Resource;
-import dev.hireben.demo.rest.resource.domain.model.Tenant;
 
 public interface ResourceRepository {
 
@@ -13,8 +12,8 @@ public interface ResourceRepository {
 
   void delete(Resource resource);
 
-  Paginated<Resource> findAllByTenant(Tenant tenant, Paginable paginable);
+  Paginated<Resource> findAllByTenant(String tenant, Paginable paginable);
 
-  Optional<Resource> findByIdAndTenant(Long id, Tenant tenant);
+  Optional<Resource> findByIdAndTenant(Long id, String tenant);
 
 }

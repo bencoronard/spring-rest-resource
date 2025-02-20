@@ -5,7 +5,7 @@ CREATE TABLE IF NOT EXISTS resource (
     field_1    VARCHAR(255) NOT NULL,
     field_2    VARCHAR(255) NOT NULL,
     field_3    VARCHAR(255) NOT NULL,
-    tenant     VARCHAR(12) NOT NULL CHECK (tenant IN ('CONSENT', 'NOTIFICATION', 'INSURANCE', 'AUCTION')),
+    tenant     VARCHAR(255) NOT NULL,
     created_by VARCHAR(255) NOT NULL,
     created_at TIMESTAMP(6) WITH TIME ZONE NOT NULL,
     PRIMARY KEY (id)

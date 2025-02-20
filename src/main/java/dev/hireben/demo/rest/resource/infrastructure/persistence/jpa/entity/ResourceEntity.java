@@ -2,11 +2,8 @@ package dev.hireben.demo.rest.resource.infrastructure.persistence.jpa.entity;
 
 import java.time.Instant;
 
-import dev.hireben.demo.rest.resource.domain.model.Tenant;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -42,9 +39,8 @@ public class ResourceEntity {
   @Column(name = "field_3", nullable = false)
   private String field3;
 
-  @Enumerated(EnumType.STRING)
   @Column(name = "tenant", length = 12, updatable = false, nullable = false)
-  private Tenant tenant;
+  private String tenant;
 
   @Column(name = "created_by", updatable = false, nullable = false)
   private String createdBy;

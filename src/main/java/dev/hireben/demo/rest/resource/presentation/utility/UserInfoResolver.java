@@ -11,7 +11,6 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 
 import dev.hireben.demo.rest.resource.application.dto.UserDTO;
 import dev.hireben.demo.rest.resource.application.exception.InvalidUserInfoException;
-import dev.hireben.demo.rest.resource.domain.model.Tenant;
 import dev.hireben.demo.rest.resource.presentation.model.HttpHeaderKey;
 import dev.hireben.demo.rest.resource.presentation.utility.annotation.UserInfo;
 
@@ -39,21 +38,15 @@ public class UserInfoResolver implements HandlerMethodArgumentResolver {
       @Nullable WebDataBinderFactory binderFactory) throws Exception {
 
     String userId = webRequest.getHeader(HttpHeaderKey.USER_ID);
-    String tenantStr = webRequest.getHeader(HttpHeaderKey.USER_TENANT);
 
     if (userId == null) {
       throw new InvalidUserInfoException(String.format("Missing %s header", HttpHeaderKey.USER_ID));
     }
 
-    if (tenantStr == null) {
-      throw new InvalidUserInfoException(String.format("Missing %s header", HttpHeaderKey.USER_TENANT));
-    }
+    String tenant = webRequest.getHeader(HttpHeaderKey.USER_TENANT);
 
-    Tenant tenant;
-    try {
-      tenant = Tenant.valueOf(tenantStr.toUpperCase());
-    } catch (IllegalArgumentException e) {
-      throw new InvalidUserInfoException(String.format("Invalid tenant value: %s", tenantStr));
+    if (tenant == null) {
+      throw new InvalidUserInfoException(String.format("Missing %s header", HttpHeaderKey.USER_TENANT));
     }
 
     return UserDTO.builder()

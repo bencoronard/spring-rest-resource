@@ -6,15 +6,14 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import dev.hireben.demo.rest.resource.domain.model.Tenant;
 import dev.hireben.demo.rest.resource.infrastructure.persistence.jpa.entity.ResourceEntity;
 
 public interface JpaResourceRepository extends JpaRepository<ResourceEntity, Long> {
 
-  void deleteByIdAndTenant(Long id, Tenant tenant);
+  void deleteByIdAndTenant(Long id, String tenant);
 
-  Page<ResourceEntity> findAllByTenant(Tenant tenant, Pageable pageable);
+  Page<ResourceEntity> findAllByTenant(String tenant, Pageable pageable);
 
-  Optional<ResourceEntity> findByIdAndTenant(Long id, Tenant tenant);
+  Optional<ResourceEntity> findByIdAndTenant(Long id, String tenant);
 
 }

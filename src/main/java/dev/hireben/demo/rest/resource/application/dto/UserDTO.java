@@ -1,6 +1,5 @@
 package dev.hireben.demo.rest.resource.application.dto;
 
-import dev.hireben.demo.rest.resource.domain.model.Tenant;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -13,6 +12,6 @@ public class UserDTO {
   // ---------------------------------------------------------------------------//
 
   private final String id;
-  private final Tenant tenant;
+  private final String tenant;
 
 }

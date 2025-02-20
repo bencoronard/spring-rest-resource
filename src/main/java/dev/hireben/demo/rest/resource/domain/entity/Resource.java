@@ -2,7 +2,6 @@ package dev.hireben.demo.rest.resource.domain.entity;
 
 import java.time.Instant;
 
-import dev.hireben.demo.rest.resource.domain.model.Tenant;
 import lombok.Builder;
 import lombok.Data;
 
@@ -18,7 +17,7 @@ public class Resource {
   private String field1;
   private String field2;
   private String field3;
-  private Tenant tenant;
+  private String tenant;
   private String createdBy;
   private Instant createdAt;
 
