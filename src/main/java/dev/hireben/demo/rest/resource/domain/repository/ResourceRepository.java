@@ -8,11 +8,11 @@ import dev.hireben.demo.rest.resource.domain.entity.Resource;
 
 public interface ResourceRepository {
 
-  Resource save(Resource resource);
+  Long save(Resource resource);
 
-  void delete(Resource resource);
+  void deleteByIdAndTenant(Long id, String tenant);
 
-  Paginated<Resource> findAllByTenant(String tenant, Paginable paginable);
+  Paginated<Resource> findAllByTenant(Paginable paginable, String tenant);
 
   Optional<Resource> findByIdAndTenant(Long id, String tenant);
 

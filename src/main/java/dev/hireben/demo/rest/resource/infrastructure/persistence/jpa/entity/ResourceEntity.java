@@ -2,11 +2,13 @@ package dev.hireben.demo.rest.resource.infrastructure.persistence.jpa.entity;
 
 import java.time.Instant;
 
+import dev.hireben.demo.rest.resource.infrastructure.persistence.jpa.model.ResourceEntityId;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.IdClass;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -19,6 +21,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "resource", schema = "public")
+@IdClass(ResourceEntityId.class)
 public class ResourceEntity {
 
   // ---------------------------------------------------------------------------//
@@ -30,6 +33,10 @@ public class ResourceEntity {
   @Column(name = "id", updatable = false, nullable = false)
   private Long id;
 
+  @Id
+  @Column(name = "tenant", updatable = false, nullable = false)
+  private String tenant;
+
   @Column(name = "field_1", nullable = false)
   private String field1;
 
@@ -38,9 +45,6 @@ public class ResourceEntity {
 
   @Column(name = "field_3", nullable = false)
   private String field3;
-
-  @Column(name = "tenant", length = 12, updatable = false, nullable = false)
-  private String tenant;
 
   @Column(name = "created_by", updatable = false, nullable = false)
   private String createdBy;

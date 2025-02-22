@@ -14,10 +14,10 @@ public class Resource {
   // ---------------------------------------------------------------------------//
 
   private Long id;
+  private String tenant;
   private String field1;
   private String field2;
   private String field3;
-  private String tenant;
   private String createdBy;
   private Instant createdAt;
 

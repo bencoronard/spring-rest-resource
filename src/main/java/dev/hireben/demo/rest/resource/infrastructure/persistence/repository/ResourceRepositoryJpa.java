@@ -16,6 +16,7 @@ import dev.hireben.demo.rest.resource.domain.entity.Resource;
 import dev.hireben.demo.rest.resource.domain.repository.ResourceRepository;
 import dev.hireben.demo.rest.resource.infrastructure.persistence.jpa.entity.ResourceEntity;
 import dev.hireben.demo.rest.resource.infrastructure.persistence.jpa.mapper.ResourceEntityMapper;
+import dev.hireben.demo.rest.resource.infrastructure.persistence.jpa.model.ResourceEntityId;
 import dev.hireben.demo.rest.resource.infrastructure.persistence.jpa.repository.JpaResourceRepository;
 import lombok.RequiredArgsConstructor;
 
@@ -34,27 +35,35 @@ public class ResourceRepositoryJpa implements ResourceRepository {
   // ---------------------------------------------------------------------------//
 
   @Override
-  public Resource save(Resource resource) {
-    return ResourceEntityMapper.toDomain(repository.save(ResourceEntityMapper.fromDomain(resource)));
+  public Long save(Resource resource) {
+    return repository.save(ResourceEntityMapper.fromDomain(resource)).getId();
   }
 
   // ---------------------------------------------------------------------------//
 
   @Override
-  public void delete(Resource resource) {
-    repository.delete(ResourceEntityMapper.fromDomain(resource));
+  public void deleteByIdAndTenant(Long id, String tenant) {
+    repository.deleteById(new ResourceEntityId(id, tenant));
   }
 
   // ---------------------------------------------------------------------------//
 
   @Override
-  public Paginated<Resource> findAllByTenant(String tenant, Paginable paginable) {
+  public Optional<Resource> findByIdAndTenant(Long id, String tenant) {
+    return repository.findById(new ResourceEntityId(id, tenant)).map(ResourceEntityMapper::toDomain);
+  }
+
+  // ---------------------------------------------------------------------------//
+
+  @Override
+  public Paginated<Resource> findAllByTenant(Paginable paginable, String tenant) {
 
     List<Order> orders = paginable.getSortFieldsDesc().entrySet().stream()
         .map(entry -> entry.getValue() ? Order.desc(entry.getKey()) : Order.asc(entry.getKey()))
         .toList();
 
-    Pageable pageable = PageRequest.of(paginable.getPageNumber(), paginable.getPageSize(), Sort.by(orders));
+    Pageable pageable = PageRequest.of(paginable.getPageNumber(),
+        paginable.getPageSize(), Sort.by(orders));
 
     Page<ResourceEntity> page = repository.findAllByTenant(tenant, pageable);
 
@@ -66,13 +75,6 @@ public class ResourceRepositoryJpa implements ResourceRepository {
         .pageSize(page.getSize())
         .totalElements(page.getTotalElements())
         .build();
-  }
-
-  // ---------------------------------------------------------------------------//
-
-  @Override
-  public Optional<Resource> findByIdAndTenant(Long id, String tenant) {
-    return repository.findByIdAndTenant(id, tenant).map(ResourceEntityMapper::toDomain);
   }
 
 }
