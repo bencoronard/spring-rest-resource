@@ -1,4 +1,4 @@
-package dev.hireben.demo.rest.resource.infrastructure.configuration;
+package dev.hireben.demo.rest.resource.presentation.configuration;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
