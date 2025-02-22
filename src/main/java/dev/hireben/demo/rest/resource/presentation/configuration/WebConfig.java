@@ -7,7 +7,7 @@ import org.springframework.lang.NonNull;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import dev.hireben.demo.rest.resource.presentation.utility.UserInfoResolver;
+import dev.hireben.demo.rest.resource.utility.annotation.UserInfoResolver;
 import lombok.RequiredArgsConstructor;
 
 @Configuration
