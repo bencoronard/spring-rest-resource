@@ -1,4 +1,4 @@
-package dev.hireben.demo.rest.resource.presentation.response;
+package dev.hireben.demo.rest.resource.presentation.exception.dto;
 
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
@@ -7,15 +7,14 @@ import lombok.Getter;
 
 @Builder
 @Getter
-@JsonPropertyOrder({ "code", "message", "data" })
-public class GlobalResponseBody<T> {
+@JsonPropertyOrder({ "field", "message" })
+public class FieldValidationErrorMap {
 
   // ---------------------------------------------------------------------------//
   // Fields
   // ---------------------------------------------------------------------------//
 
-  private final String code;
+  private final String field;
   private final String message;
-  private final T payload;
 
 }

@@ -1,4 +1,4 @@
-package dev.hireben.demo.rest.resource.presentation.request;
+package dev.hireben.demo.rest.resource.presentation.dto;
 
 import org.springframework.lang.Nullable;
 
