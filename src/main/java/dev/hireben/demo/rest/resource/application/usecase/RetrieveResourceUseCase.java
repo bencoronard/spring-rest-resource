@@ -25,26 +25,26 @@ public class RetrieveResourceUseCase {
   // Methods
   // ---------------------------------------------------------------------------//
 
-  public ResourceDTO findResource(Long id, UserDTO user) {
+  public ResourceDTO find(Long id, UserDTO user) {
 
-    Resource foundResource = repository.findByIdAndTenant(id, user.getTenant())
+    Resource resource = repository.findByIdAndTenant(id, user.getTenant())
         .orElseThrow(() -> new ResourceNotFoundException(String.format("Resource %s not found", id)));
 
-    return ResourceMapper.toDto(foundResource);
+    return ResourceMapper.toDto(resource);
   }
 
   // ---------------------------------------------------------------------------//
 
-  public Paginated<ResourceDTO> findAllResources(Paginable paginable, UserDTO user) {
+  public Paginated<ResourceDTO> findAll(Paginable paginable, UserDTO user) {
 
-    Paginated<Resource> page = repository.findAllByTenant(user.getTenant(), paginable);
+    Paginated<Resource> page = repository.findAllByTenant(paginable, user.getTenant());
 
-    Collection<ResourceDTO> resourceDTOs = page.getContent().stream()
+    Collection<ResourceDTO> resources = page.getContent().stream()
         .map(resource -> ResourceMapper.toDto(resource))
         .toList();
 
     return Paginated.<ResourceDTO>builder()
-        .content(resourceDTOs)
+        .content(resources)
         .pageNumber(page.getPageNumber())
         .pageSize(page.getPageSize())
         .totalElements(page.getTotalElements())
