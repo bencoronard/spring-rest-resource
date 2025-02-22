@@ -1,18 +1,17 @@
-package dev.hireben.demo.rest.resource.presentation.utility;
+package dev.hireben.demo.rest.resource.utility.annotation;
 
 import org.springframework.core.MethodParameter;
 import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.MissingRequestHeaderException;
 import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
 import dev.hireben.demo.rest.resource.application.dto.UserDTO;
-import dev.hireben.demo.rest.resource.application.exception.InvalidUserInfoException;
 import dev.hireben.demo.rest.resource.presentation.model.HttpHeaderKey;
-import dev.hireben.demo.rest.resource.presentation.utility.annotation.UserInfo;
 
 @Component
 public class UserInfoResolver implements HandlerMethodArgumentResolver {
@@ -38,15 +37,13 @@ public class UserInfoResolver implements HandlerMethodArgumentResolver {
       @Nullable WebDataBinderFactory binderFactory) throws Exception {
 
     String userId = webRequest.getHeader(HttpHeaderKey.USER_ID);
-
     if (userId == null) {
-      throw new InvalidUserInfoException(String.format("Missing %s header", HttpHeaderKey.USER_ID));
+      throw new MissingRequestHeaderException(HttpHeaderKey.USER_ID, parameter);
     }
 
     String tenant = webRequest.getHeader(HttpHeaderKey.USER_TENANT);
-
     if (tenant == null) {
-      throw new InvalidUserInfoException(String.format("Missing %s header", HttpHeaderKey.USER_TENANT));
+      throw new MissingRequestHeaderException(HttpHeaderKey.USER_TENANT, parameter);
     }
 
     return UserDTO.builder()

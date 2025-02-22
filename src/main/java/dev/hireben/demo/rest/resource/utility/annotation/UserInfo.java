@@ -1,4 +1,4 @@
-package dev.hireben.demo.rest.resource.presentation.utility.annotation;
+package dev.hireben.demo.rest.resource.utility.annotation;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
