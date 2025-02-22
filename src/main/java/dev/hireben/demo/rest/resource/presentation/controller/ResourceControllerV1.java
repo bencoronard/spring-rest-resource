@@ -1,5 +1,6 @@
 package dev.hireben.demo.rest.resource.presentation.controller;
 
+import java.net.URI;
 import java.util.Collection;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -7,6 +8,7 @@ import java.util.stream.Collectors;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -25,11 +27,9 @@ import dev.hireben.demo.rest.resource.application.usecase.RetrieveResourceUseCas
 import dev.hireben.demo.rest.resource.application.usecase.UpdateResourceUseCase;
 import dev.hireben.demo.rest.resource.domain.dto.Paginable;
 import dev.hireben.demo.rest.resource.domain.dto.Paginated;
-import dev.hireben.demo.rest.resource.presentation.model.ResponseValue;
-import dev.hireben.demo.rest.resource.presentation.request.CreateResourceRequest;
-import dev.hireben.demo.rest.resource.presentation.request.UpdateResourceRequest;
-import dev.hireben.demo.rest.resource.presentation.response.GlobalResponseBody;
-import dev.hireben.demo.rest.resource.presentation.utility.annotation.UserInfo;
+import dev.hireben.demo.rest.resource.presentation.dto.CreateResourceRequest;
+import dev.hireben.demo.rest.resource.presentation.dto.UpdateResourceRequest;
+import dev.hireben.demo.rest.resource.utility.annotation.UserInfo;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
@@ -52,7 +52,7 @@ public class ResourceControllerV1 {
   // ---------------------------------------------------------------------------//
 
   @GetMapping
-  public ResponseEntity<GlobalResponseBody<Paginated<ResourceDTO>>> fetchAllResources(
+  public ResponseEntity<Paginated<ResourceDTO>> fetchAllResources(
       @RequestParam(name = "page", defaultValue = "0") int pageNumber,
       @RequestParam(name = "size", defaultValue = "10") int pageSize,
       @RequestParam(name = "sort", defaultValue = "id:asc") Collection<String> sortParams,
@@ -71,57 +71,35 @@ public class ResourceControllerV1 {
         .sortFieldsDesc(sortFields)
         .build();
 
-    Paginated<ResourceDTO> payload = readResourceUseCase.findAllResources(paginable, user);
-
-    GlobalResponseBody<Paginated<ResourceDTO>> body = GlobalResponseBody.<Paginated<ResourceDTO>>builder()
-        .code(ResponseValue.RESP_CODE_SUCCESS)
-        .message("Resources")
-        .payload(payload)
-        .build();
-
-    return ResponseEntity.ok(body);
+    return ResponseEntity.ok(readResourceUseCase.findAll(paginable, user));
   }
 
   // ---------------------------------------------------------------------------//
 
   @GetMapping("/{id}")
-  public ResponseEntity<GlobalResponseBody<ResourceDTO>> fetchResource(
+  public ResponseEntity<ResourceDTO> fetchResource(
       @PathVariable Long id,
       @UserInfo UserDTO user) {
 
-    ResourceDTO payload = readResourceUseCase.findResource(id, user);
-
-    GlobalResponseBody<ResourceDTO> body = GlobalResponseBody.<ResourceDTO>builder()
-        .code(ResponseValue.RESP_CODE_SUCCESS)
-        .message(String.format("Resource %s", id))
-        .payload(payload)
-        .build();
-
-    return ResponseEntity.ok(body);
+    return ResponseEntity.ok(readResourceUseCase.find(id, user));
   }
 
   // ---------------------------------------------------------------------------//
 
   @DeleteMapping("/{id}")
-  public ResponseEntity<GlobalResponseBody<Void>> deleteResource(
+  public ResponseEntity<Void> deleteResource(
       @PathVariable Long id,
       @UserInfo UserDTO user) {
 
-    deleteResourceUseCase.deleteResource(id, user);
+    deleteResourceUseCase.delete(id, user);
 
-    GlobalResponseBody<Void> body = GlobalResponseBody.<Void>builder()
-        .code(ResponseValue.RESP_CODE_SUCCESS)
-        .message(String.format("Resource %s deleted", id))
-        .payload(null)
-        .build();
-
-    return ResponseEntity.ok(body);
+    return ResponseEntity.noContent().build();
   }
 
   // ---------------------------------------------------------------------------//
 
   @PostMapping
-  public ResponseEntity<GlobalResponseBody<ResourceDTO>> createResource(
+  public ResponseEntity<Void> createResource(
       @RequestBody @Valid CreateResourceRequest data,
       @UserInfo UserDTO user) {
 
@@ -131,21 +109,15 @@ public class ResourceControllerV1 {
         .field3(data.field3())
         .build();
 
-    ResourceDTO createdResource = createResourceUseCase.createResource(dto, user);
+    Long id = createResourceUseCase.create(dto, user);
 
-    GlobalResponseBody<ResourceDTO> body = GlobalResponseBody.<ResourceDTO>builder()
-        .code(ResponseValue.RESP_CODE_SUCCESS)
-        .message("Resource created")
-        .payload(createdResource)
-        .build();
-
-    return ResponseEntity.ok(body);
+    return ResponseEntity.created(URI.create(String.format("/api/v1/resources/%d", id))).build();
   }
 
   // ---------------------------------------------------------------------------//
 
-  @PutMapping("/{id}")
-  public ResponseEntity<GlobalResponseBody<ResourceDTO>> updateResource(
+  @PatchMapping("/{id}")
+  public ResponseEntity<Void> updateResource(
       @PathVariable Long id,
       @RequestBody @Valid UpdateResourceRequest data,
       @UserInfo UserDTO user) {
@@ -156,15 +128,31 @@ public class ResourceControllerV1 {
         .field3(data.field3())
         .build();
 
-    ResourceDTO updatedResource = updateResourceUseCase.updateResource(id, dto, user);
+    updateResourceUseCase.update(id, dto, user);
 
-    GlobalResponseBody<ResourceDTO> body = GlobalResponseBody.<ResourceDTO>builder()
-        .code(ResponseValue.RESP_CODE_SUCCESS)
-        .message(String.format("Resource %s updated", id))
-        .payload(updatedResource)
+    return ResponseEntity.noContent().build();
+  }
+
+  // ---------------------------------------------------------------------------//
+
+  @PutMapping("/{id}")
+  public ResponseEntity<Void> replaceResource(
+      @PathVariable Long id,
+      @RequestBody @Valid CreateResourceRequest data,
+      @UserInfo UserDTO user) {
+
+    CreateResourceDTO dto = CreateResourceDTO.builder()
+        .field1(data.field1())
+        .field2(data.field2())
+        .field3(data.field3())
         .build();
 
-    return ResponseEntity.ok(body);
+    Long newId = updateResourceUseCase.replace(id, dto, user);
+
+    return newId == null ? ResponseEntity.noContent().build()
+        : ResponseEntity.created(URI.create(String.format("/api/v1/resources/%d", newId))).build();
   }
+
+  // ---------------------------------------------------------------------------//
 
 }
