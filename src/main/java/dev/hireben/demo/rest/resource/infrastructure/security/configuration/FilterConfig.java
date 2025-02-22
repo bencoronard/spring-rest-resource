@@ -5,7 +5,8 @@ import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import dev.hireben.demo.rest.resource.infrastructure.security.filter.HttpHeaderFilter;
+import dev.hireben.demo.rest.resource.infrastructure.security.filter.ApiKeyFilter;
+import dev.hireben.demo.rest.resource.infrastructure.security.filter.RequestLoggingFilter;
 import lombok.RequiredArgsConstructor;
 
 @Configuration
@@ -13,21 +14,25 @@ import lombok.RequiredArgsConstructor;
 public class FilterConfig {
 
   // ---------------------------------------------------------------------------//
-  // Fields
-  // ---------------------------------------------------------------------------//
-
-  @Value("${info.api.internal.secret-key}")
-  private String API_KEY;
-
-  // ---------------------------------------------------------------------------//
   // Methods
   // ---------------------------------------------------------------------------//
 
   @Bean
-  FilterRegistrationBean<HttpHeaderFilter> httpHeaderFilter() {
-    FilterRegistrationBean<HttpHeaderFilter> filter = new FilterRegistrationBean<>();
-    filter.setFilter(new HttpHeaderFilter(API_KEY));
+  FilterRegistrationBean<RequestLoggingFilter> requestLoggingFilter() {
+    FilterRegistrationBean<RequestLoggingFilter> filter = new FilterRegistrationBean<>();
+    filter.setFilter(new RequestLoggingFilter());
     filter.setOrder(0);
+    filter.addUrlPatterns("/*");
+    return filter;
+  }
+
+  // ---------------------------------------------------------------------------//
+
+  @Bean
+  FilterRegistrationBean<ApiKeyFilter> apiKeyFilter(@Value("${info.api.internal.secret-key}") String apiKey) {
+    FilterRegistrationBean<ApiKeyFilter> filter = new FilterRegistrationBean<>();
+    filter.setFilter(new ApiKeyFilter(apiKey));
+    filter.setOrder(1);
     filter.addUrlPatterns("/api/*");
     return filter;
   }
