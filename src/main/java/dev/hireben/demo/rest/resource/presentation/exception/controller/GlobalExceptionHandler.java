@@ -9,16 +9,16 @@ import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingRequestHeaderException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 
-import dev.hireben.demo.rest.resource.application.exception.InvalidUserInfoException;
 import dev.hireben.demo.rest.resource.application.exception.ResourceNotFoundException;
 import dev.hireben.demo.rest.resource.application.model.ApplicationException;
+import dev.hireben.demo.rest.resource.presentation.exception.dto.FieldValidationErrorMap;
 import dev.hireben.demo.rest.resource.presentation.exception.model.SeverityLevel;
 import dev.hireben.demo.rest.resource.presentation.model.RequestAttributeKey;
-import dev.hireben.demo.rest.resource.presentation.response.FieldValidationErrorMap;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.ConstraintViolation;
@@ -32,12 +32,10 @@ public class GlobalExceptionHandler {
   // ---------------------------------------------------------------------------//
 
   private static final Map<Class<? extends Throwable>, HttpStatus> EXCEPTION_STATUS_MAP = Map.of(
-      ResourceNotFoundException.class, HttpStatus.NOT_FOUND,
-      InvalidUserInfoException.class, HttpStatus.BAD_REQUEST);
+      ResourceNotFoundException.class, HttpStatus.NOT_FOUND);
 
   private static final Map<Class<? extends Throwable>, String> EXCEPTION_CODE_MAP = Map.of(
-      ResourceNotFoundException.class, "4000",
-      InvalidUserInfoException.class, "4010");
+      ResourceNotFoundException.class, "4004");
 
   // ---------------------------------------------------------------------------//
   // Methods
@@ -107,6 +105,22 @@ public class GlobalExceptionHandler {
     request.setAttribute(RequestAttributeKey.ERR_RESP_CODE, "4002");
     request.setAttribute(RequestAttributeKey.ERR_RESP_MSG, "Constraint violation errors");
     request.setAttribute(RequestAttributeKey.ERR_RESP_DATA, violationErrorMaps);
+    request.setAttribute(RequestAttributeKey.ERR_SEVERITY, SeverityLevel.LOW);
+
+    response.sendError(HttpStatus.BAD_REQUEST.value(), exception.getMessage());
+  }
+
+  // ---------------------------------------------------------------------------//
+
+  @ExceptionHandler(MissingRequestHeaderException.class)
+  public void handleMissingRequestHeaderException(
+      MissingRequestHeaderException exception,
+      HttpServletRequest request,
+      HttpServletResponse response) throws IOException {
+
+    request.setAttribute(RequestAttributeKey.ERR_RESP_CODE, "4017");
+    request.setAttribute(RequestAttributeKey.ERR_RESP_MSG,
+        String.format("Missing %s header", exception.getHeaderName()));
     request.setAttribute(RequestAttributeKey.ERR_SEVERITY, SeverityLevel.LOW);
 
     response.sendError(HttpStatus.BAD_REQUEST.value(), exception.getMessage());
