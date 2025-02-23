@@ -22,6 +22,7 @@ services:
       DEMO_DATABASE_POSTGRES_PASSWORD: hireBenDemoDbPassword
       APP_DATABASE_POOL_CONN_MAX: 5
       APP_DATABASE_POOL_CONN_MIN: 1
+      APP_DATABASE_SHOW_SQL: false
       
   postgres:
     image: postgres:alpine
