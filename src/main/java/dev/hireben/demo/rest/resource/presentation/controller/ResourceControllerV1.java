@@ -1,10 +1,6 @@
 package dev.hireben.demo.rest.resource.presentation.controller;
 
 import java.net.URI;
-import java.util.Collection;
-import java.util.Map;
-import java.util.stream.Collectors;
-
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,7 +10,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import dev.hireben.demo.rest.resource.application.dto.CreateResourceDTO;
@@ -29,6 +24,7 @@ import dev.hireben.demo.rest.resource.domain.dto.Paginable;
 import dev.hireben.demo.rest.resource.domain.dto.Paginated;
 import dev.hireben.demo.rest.resource.presentation.dto.CreateResourceRequest;
 import dev.hireben.demo.rest.resource.presentation.dto.UpdateResourceRequest;
+import dev.hireben.demo.rest.resource.utility.annotation.Pagination;
 import dev.hireben.demo.rest.resource.utility.annotation.UserInfo;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -53,23 +49,8 @@ public class ResourceControllerV1 {
 
   @GetMapping
   public ResponseEntity<Paginated<ResourceDTO>> fetchAllResources(
-      @RequestParam(name = "page", defaultValue = "0") int pageNumber,
-      @RequestParam(name = "size", defaultValue = "10") int pageSize,
-      @RequestParam(name = "sort", defaultValue = "id:asc") Collection<String> sortParams,
+      @Pagination Paginable paginable,
       @UserInfo UserDTO user) {
-
-    Map<String, Boolean> sortFields = sortParams.stream()
-        .map(param -> param.split(":"))
-        .filter(parts -> parts.length == 2)
-        .collect(Collectors.toMap(
-            parts -> parts[0],
-            parts -> "desc".equalsIgnoreCase(parts[1])));
-
-    Paginable paginable = Paginable.builder()
-        .pageNumber(pageNumber)
-        .pageSize(pageSize)
-        .sortFieldsDesc(sortFields)
-        .build();
 
     return ResponseEntity.ok(readResourceUseCase.findAll(paginable, user));
   }
