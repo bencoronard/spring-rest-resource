@@ -1,5 +1,6 @@
 server:
   port: "${APP_SERVER_PORT:8080}"
+  secret-key: "${DEMO_SERVICE_REST_RESOURCE_SECRET_KEY:hireBenDemoSecretKey}"
   error:
     whitelabel:
       enabled: false
@@ -36,17 +37,15 @@ spring:
       idle-timeout: 30000
       connection-timeout: 30000
       max-lifetime: 2000000
-      pool-name: "SpringBootHikariCP"
+      pool-name: "REST_RESOURCE_HikariCP"
 
 info:
-  api:
-    internal:
-      service-id: "${DEMO_SERVICE_REST_RESOURCE_ID:REST_RESOURCE}"
-      secret-key: "${DEMO_SERVICE_REST_RESOURCE_SECRET_KEY:hireBenDemoSecretKey}"
+  app:
+    service-id: "${DEMO_SERVICE_REST_RESOURCE_ID:REST_RESOURCE}"
 
 logging:
   level:
-    root: info
+    root: "info"
   include-application-name: true
   include-application-group: true
 

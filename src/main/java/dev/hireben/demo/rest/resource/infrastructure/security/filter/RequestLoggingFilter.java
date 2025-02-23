@@ -14,18 +14,34 @@ import lombok.extern.slf4j.Slf4j;
 public class RequestLoggingFilter extends CommonsRequestLoggingFilter {
 
   // ---------------------------------------------------------------------------//
+  // Fields
+  // ---------------------------------------------------------------------------//
+
+  private final boolean shouldLog;
+
+  // ---------------------------------------------------------------------------//
   // Constructors
   // ---------------------------------------------------------------------------//
 
-  public RequestLoggingFilter() {
+  public RequestLoggingFilter(boolean shouldLog) {
+    this.shouldLog = shouldLog;
     setIncludeQueryString(true);
     setIncludeHeaders(false);
     setIncludePayload(false);
     setMaxPayloadLength(500);
+    setBeforeMessagePrefix("");
+    setBeforeMessageSuffix("");
   }
 
   // ---------------------------------------------------------------------------//
   // Methods
+  // ---------------------------------------------------------------------------//
+
+  @Override
+  protected boolean shouldLog(@NonNull HttpServletRequest request) {
+    return this.shouldLog;
+  }
+
   // ---------------------------------------------------------------------------//
 
   @Override

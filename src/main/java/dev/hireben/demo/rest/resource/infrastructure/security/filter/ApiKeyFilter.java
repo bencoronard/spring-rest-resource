@@ -5,7 +5,6 @@ import org.springframework.lang.NonNull;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import dev.hireben.demo.rest.resource.presentation.model.HttpHeaderKey;
-import dev.hireben.demo.rest.resource.presentation.model.RequestAttributeKey;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -32,8 +31,6 @@ public class ApiKeyFilter extends OncePerRequestFilter {
       @NonNull FilterChain filterChain)
       throws ServletException, IOException {
 
-    request.setAttribute(RequestAttributeKey.TRACE_ID, extractTraceId(request));
-
     if (!hasValidApiKey(request)) {
       response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Missing or invalid API key");
       return;
@@ -49,13 +46,6 @@ public class ApiKeyFilter extends OncePerRequestFilter {
   private boolean hasValidApiKey(HttpServletRequest request) {
     String reqApiKey = request.getHeader(HttpHeaderKey.API_KEY);
     return reqApiKey != null && API_KEY.equals(reqApiKey);
-  }
-
-  // ---------------------------------------------------------------------------//
-
-  private String extractTraceId(HttpServletRequest request) {
-    String reqTraceId = request.getHeader(HttpHeaderKey.TRACE_ID);
-    return reqTraceId != null && !reqTraceId.isBlank() ? reqTraceId : null;
   }
 
 }
