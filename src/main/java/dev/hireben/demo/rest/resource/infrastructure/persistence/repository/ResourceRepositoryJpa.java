@@ -16,7 +16,6 @@ import dev.hireben.demo.rest.resource.domain.entity.Resource;
 import dev.hireben.demo.rest.resource.domain.repository.ResourceRepository;
 import dev.hireben.demo.rest.resource.infrastructure.persistence.jpa.entity.ResourceEntity;
 import dev.hireben.demo.rest.resource.infrastructure.persistence.jpa.mapper.ResourceEntityMapper;
-import dev.hireben.demo.rest.resource.infrastructure.persistence.jpa.model.ResourceEntityId;
 import dev.hireben.demo.rest.resource.infrastructure.persistence.jpa.repository.JpaResourceRepository;
 import lombok.RequiredArgsConstructor;
 
@@ -43,14 +42,14 @@ public class ResourceRepositoryJpa implements ResourceRepository {
 
   @Override
   public void deleteByIdAndTenant(Long id, String tenant) {
-    repository.deleteById(new ResourceEntityId(id, tenant));
+    repository.deleteByIdAndTenant(id, tenant);
   }
 
   // ---------------------------------------------------------------------------//
 
   @Override
   public Optional<Resource> findByIdAndTenant(Long id, String tenant) {
-    return repository.findById(new ResourceEntityId(id, tenant)).map(ResourceEntityMapper::toDomain);
+    return repository.findByIdAndTenant(id, tenant).map(ResourceEntityMapper::toDomain);
   }
 
   // ---------------------------------------------------------------------------//

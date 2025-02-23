@@ -1,15 +1,19 @@
 package dev.hireben.demo.rest.resource.infrastructure.persistence.jpa.repository;
 
+import java.util.Optional;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import dev.hireben.demo.rest.resource.infrastructure.persistence.jpa.entity.ResourceEntity;
 
-import dev.hireben.demo.rest.resource.infrastructure.persistence.jpa.model.ResourceEntityId;
+public interface JpaResourceRepository extends JpaRepository<ResourceEntity, Long> {
 
-public interface JpaResourceRepository extends JpaRepository<ResourceEntity, ResourceEntityId> {
+  Optional<ResourceEntity> findByIdAndTenant(Long id, String tenant);
 
   Page<ResourceEntity> findAllByTenant(String tenant, Pageable pageable);
+
+  void deleteByIdAndTenant(Long id, String tenant);
 
 }

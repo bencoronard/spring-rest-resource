@@ -16,14 +16,11 @@ import dev.hireben.demo.rest.resource.application.dto.CreateResourceDTO;
 import dev.hireben.demo.rest.resource.application.dto.ResourceDTO;
 import dev.hireben.demo.rest.resource.application.dto.UpdateResourceDTO;
 import dev.hireben.demo.rest.resource.application.dto.UserDTO;
-import dev.hireben.demo.rest.resource.application.usecase.CreateResourceUseCase;
-import dev.hireben.demo.rest.resource.application.usecase.DeleteResourceUseCase;
-import dev.hireben.demo.rest.resource.application.usecase.RetrieveResourceUseCase;
-import dev.hireben.demo.rest.resource.application.usecase.UpdateResourceUseCase;
 import dev.hireben.demo.rest.resource.domain.dto.Paginable;
 import dev.hireben.demo.rest.resource.domain.dto.Paginated;
 import dev.hireben.demo.rest.resource.presentation.dto.CreateResourceRequest;
 import dev.hireben.demo.rest.resource.presentation.dto.UpdateResourceRequest;
+import dev.hireben.demo.rest.resource.presentation.service.ResourceService;
 import dev.hireben.demo.rest.resource.utility.annotation.Pagination;
 import dev.hireben.demo.rest.resource.utility.annotation.UserInfo;
 import jakarta.validation.Valid;
@@ -38,41 +35,38 @@ public class ResourceControllerV1 {
   // Dependencies
   // ---------------------------------------------------------------------------//
 
-  private final CreateResourceUseCase createResourceUseCase;
-  private final RetrieveResourceUseCase readResourceUseCase;
-  private final UpdateResourceUseCase updateResourceUseCase;
-  private final DeleteResourceUseCase deleteResourceUseCase;
+  private final ResourceService resourceService;
 
   // ---------------------------------------------------------------------------//
   // Methods
   // ---------------------------------------------------------------------------//
 
   @GetMapping
-  public ResponseEntity<Paginated<ResourceDTO>> fetchAllResources(
+  public ResponseEntity<Paginated<ResourceDTO>> retrieveAllResources(
       @Pagination Paginable paginable,
       @UserInfo UserDTO user) {
 
-    return ResponseEntity.ok(readResourceUseCase.findAll(paginable, user));
+    return ResponseEntity.ok(resourceService.retrieveAll(paginable, user));
   }
 
   // ---------------------------------------------------------------------------//
 
   @GetMapping("/{id}")
-  public ResponseEntity<ResourceDTO> fetchResource(
+  public ResponseEntity<ResourceDTO> retrieveResource(
       @PathVariable Long id,
       @UserInfo UserDTO user) {
 
-    return ResponseEntity.ok(readResourceUseCase.find(id, user));
+    return ResponseEntity.ok(resourceService.retrieve(id, user));
   }
 
   // ---------------------------------------------------------------------------//
 
   @DeleteMapping("/{id}")
-  public ResponseEntity<Void> deleteResource(
+  public ResponseEntity<Void> removeResource(
       @PathVariable Long id,
       @UserInfo UserDTO user) {
 
-    deleteResourceUseCase.delete(id, user);
+    resourceService.remove(id, user);
 
     return ResponseEntity.noContent().build();
   }
@@ -80,7 +74,7 @@ public class ResourceControllerV1 {
   // ---------------------------------------------------------------------------//
 
   @PostMapping
-  public ResponseEntity<Void> createResource(
+  public ResponseEntity<Void> insertResource(
       @RequestBody @Valid CreateResourceRequest data,
       @UserInfo UserDTO user) {
 
@@ -90,7 +84,7 @@ public class ResourceControllerV1 {
         .field3(data.field3())
         .build();
 
-    Long id = createResourceUseCase.create(dto, user);
+    Long id = resourceService.insert(dto, user);
 
     return ResponseEntity.created(URI.create(String.format("/api/v1/resources/%d", id))).build();
   }
@@ -109,7 +103,7 @@ public class ResourceControllerV1 {
         .field3(data.field3())
         .build();
 
-    updateResourceUseCase.update(id, dto, user);
+    resourceService.update(id, dto, user);
 
     return ResponseEntity.noContent().build();
   }
@@ -128,12 +122,10 @@ public class ResourceControllerV1 {
         .field3(data.field3())
         .build();
 
-    Long newId = updateResourceUseCase.replace(id, dto, user);
+    Long newId = resourceService.replace(id, dto, user);
 
     return newId == null ? ResponseEntity.noContent().build()
         : ResponseEntity.created(URI.create(String.format("/api/v1/resources/%d", newId))).build();
   }
-
-  // ---------------------------------------------------------------------------//
 
 }
