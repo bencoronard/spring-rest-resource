@@ -24,11 +24,12 @@ import dev.hireben.demo.rest.resource.presentation.service.ResourceService;
 import dev.hireben.demo.rest.resource.utility.annotation.Pagination;
 import dev.hireben.demo.rest.resource.utility.annotation.UserInfo;
 import jakarta.validation.Valid;
+import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/api/v1/resources")
-@RequiredArgsConstructor
+@RequiredArgsConstructor(access = AccessLevel.PROTECTED)
 public class ResourceControllerV1 {
 
   // ---------------------------------------------------------------------------//

@@ -17,10 +17,11 @@ import dev.hireben.demo.rest.resource.domain.repository.ResourceRepository;
 import dev.hireben.demo.rest.resource.infrastructure.persistence.jpa.entity.ResourceEntity;
 import dev.hireben.demo.rest.resource.infrastructure.persistence.jpa.mapper.ResourceEntityMapper;
 import dev.hireben.demo.rest.resource.infrastructure.persistence.jpa.repository.JpaResourceRepository;
+import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 
 @Repository
-@RequiredArgsConstructor
+@RequiredArgsConstructor(access = AccessLevel.PROTECTED)
 public class ResourceRepositoryJpa implements ResourceRepository {
 
   // ---------------------------------------------------------------------------//

@@ -9,10 +9,11 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import dev.hireben.demo.rest.resource.utility.annotation.PaginationResolver;
 import dev.hireben.demo.rest.resource.utility.annotation.UserInfoResolver;
+import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 
 @Configuration
-@RequiredArgsConstructor
+@RequiredArgsConstructor(access = AccessLevel.PROTECTED)
 public class WebConfig implements WebMvcConfigurer {
 
   // ---------------------------------------------------------------------------//

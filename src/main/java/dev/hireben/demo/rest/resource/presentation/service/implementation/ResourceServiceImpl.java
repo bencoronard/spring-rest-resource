@@ -14,10 +14,11 @@ import dev.hireben.demo.rest.resource.application.usecase.UpdateResourceUseCase;
 import dev.hireben.demo.rest.resource.domain.dto.Paginable;
 import dev.hireben.demo.rest.resource.domain.dto.Paginated;
 import dev.hireben.demo.rest.resource.presentation.service.ResourceService;
+import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 
 @Service
-@RequiredArgsConstructor
+@RequiredArgsConstructor(access = AccessLevel.PROTECTED)
 public class ResourceServiceImpl implements ResourceService {
 
   // ---------------------------------------------------------------------------//

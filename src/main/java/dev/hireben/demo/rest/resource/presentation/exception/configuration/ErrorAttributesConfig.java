@@ -16,12 +16,13 @@ import dev.hireben.demo.rest.resource.presentation.model.RequestAttributeKey;
 import dev.hireben.demo.rest.resource.utility.EnvironmentUtil;
 import dev.hireben.demo.rest.resource.utility.LogFormatUtil;
 import dev.hireben.demo.rest.resource.utility.RequestUtil;
+import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Component
-@RequiredArgsConstructor
+@RequiredArgsConstructor(access = AccessLevel.PROTECTED)
 public class ErrorAttributesConfig extends DefaultErrorAttributes {
 
   // ---------------------------------------------------------------------------//
