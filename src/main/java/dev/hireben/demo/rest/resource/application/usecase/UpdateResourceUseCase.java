@@ -1,6 +1,5 @@
 package dev.hireben.demo.rest.resource.application.usecase;
 
-import java.time.Instant;
 import java.util.Optional;
 
 import dev.hireben.demo.rest.resource.application.dto.CreateResourceDTO;
@@ -38,28 +37,16 @@ public class UpdateResourceUseCase {
 
   // ---------------------------------------------------------------------------//
 
-  public Long replace(Long id, CreateResourceDTO dto, UserDTO user) {
+  public void replace(Long id, CreateResourceDTO dto, UserDTO user) {
 
-    Optional<Resource> existingResource = repository.findByIdAndTenant(id, user.getTenant());
+    Resource resource = repository.findByIdAndTenant(id, user.getTenant())
+        .orElseThrow(() -> new ResourceNotFoundException(String.format("Failed to update: resource %s not found", id)));
 
-    boolean isNewResource = existingResource.isEmpty();
+    resource.setField1(dto.getField1());
+    resource.setField2(dto.getField2());
+    resource.setField3(dto.getField3());
 
-    Resource newResource = existingResource.orElseGet(() -> Resource.builder()
-        .field1(dto.getField1())
-        .field2(dto.getField2())
-        .field3(dto.getField3())
-        .createdBy(user.getId())
-        .tenant(user.getTenant())
-        .createdAt(Instant.now())
-        .build());
-
-    newResource.setField1(dto.getField1());
-    newResource.setField2(dto.getField2());
-    newResource.setField3(dto.getField3());
-
-    Long newId = repository.save(newResource);
-
-    return isNewResource ? newId : null;
+    repository.save(resource);
   }
 
 }

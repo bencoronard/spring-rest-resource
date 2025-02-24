@@ -19,6 +19,6 @@ public interface ResourceService {
 
   void update(Long id, UpdateResourceDTO dto, UserDTO user);
 
-  Long replace(Long id, CreateResourceDTO dto, UserDTO user);
+  void replace(Long id, CreateResourceDTO dto, UserDTO user);
 
 }

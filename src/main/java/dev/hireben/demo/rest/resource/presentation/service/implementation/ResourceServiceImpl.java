@@ -75,8 +75,8 @@ public class ResourceServiceImpl implements ResourceService {
 
   @Override
   @Transactional
-  public Long replace(Long id, CreateResourceDTO dto, UserDTO user) {
-    return updateResourceUseCase.replace(id, dto, user);
+  public void replace(Long id, CreateResourceDTO dto, UserDTO user) {
+    updateResourceUseCase.replace(id, dto, user);
   }
 
 }

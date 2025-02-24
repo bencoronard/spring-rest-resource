@@ -122,10 +122,9 @@ public class ResourceControllerV1 {
         .field3(data.field3())
         .build();
 
-    Long newId = resourceService.replace(id, dto, user);
+    resourceService.replace(id, dto, user);
 
-    return newId == null ? ResponseEntity.noContent().build()
-        : ResponseEntity.created(URI.create(String.format("/api/v1/resources/%d", newId))).build();
+    return ResponseEntity.noContent().build();
   }
 
 }
