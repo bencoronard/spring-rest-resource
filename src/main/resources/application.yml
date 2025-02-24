@@ -8,29 +8,23 @@ server:
 spring:
   application:
     name: "${DEMO_SERVICE_REST_RESOURCE_ID:REST_RESOURCE}"
-
   profiles:
     active: "${DEMO_SERVICE_ENVIRONMENT:dev}"
-
   threads:
     virtual:
       enabled: true
-  
   sql:
     init:
       mode: "never"
-
   jpa:
     open-in-view: false
     hibernate:
       ddl-auto: "validate"
-
   datasource:
     url: "jdbc:postgresql://${DEMO_DATABASE_POSTGRES_HOST:127.0.0.1}:${DEMO_DATABASE_POSTGRES_PORT:5432}/${DEMO_DATABASE_POSTGRES_DB:hireben-db}"
     driver-class-name: "org.postgresql.Driver"
     username: "${DEMO_DATABASE_POSTGRES_USER:hirebenDemoDbUser}"
     password: "${DEMO_DATABASE_POSTGRES_PASSWORD:hireBenDemoDbPassword}"
-
     hikari:
       minimum-idle: "${APP_DATABASE_POOL_CONN_MIN:1}"
       maximum-pool-size: "${APP_DATABASE_POOL_CONN_MAX:5}"
@@ -38,10 +32,6 @@ spring:
       connection-timeout: 30000
       max-lifetime: 2000000
       pool-name: "REST_RESOURCE_HikariCP"
-
-info:
-  app:
-    service-id: "${DEMO_SERVICE_REST_RESOURCE_ID:REST_RESOURCE}"
 
 logging:
   level:
@@ -69,6 +59,10 @@ management:
       enabled: true
     env:
       enabled: true
+
+info:
+  app:
+    service-id: "${DEMO_SERVICE_REST_RESOURCE_ID:REST_RESOURCE}"
 
 ---
 # Environment: dev
