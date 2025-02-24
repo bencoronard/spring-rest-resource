@@ -13,12 +13,12 @@ public class Resource {
   // Fields
   // ---------------------------------------------------------------------------//
 
-  private Long id;
-  private String tenant;
+  private final Long id;
+  private final String tenant;
+  private final String createdBy;
+  private final Instant createdAt;
   private String field1;
   private String field2;
   private String field3;
-  private String createdBy;
-  private Instant createdAt;
 
 }

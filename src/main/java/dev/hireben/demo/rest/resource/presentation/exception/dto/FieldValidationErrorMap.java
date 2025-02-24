@@ -3,10 +3,10 @@ package dev.hireben.demo.rest.resource.presentation.exception.dto;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import lombok.Builder;
-import lombok.Getter;
+import lombok.Value;
 
+@Value
 @Builder
-@Getter
 @JsonPropertyOrder({ "field", "message" })
 public class FieldValidationErrorMap {
 
