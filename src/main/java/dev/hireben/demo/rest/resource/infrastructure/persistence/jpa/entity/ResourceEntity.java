@@ -19,7 +19,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "resource", schema = "public")
+@Table(name = "resources", schema = "public")
 public class ResourceEntity {
 
   // ---------------------------------------------------------------------------//
